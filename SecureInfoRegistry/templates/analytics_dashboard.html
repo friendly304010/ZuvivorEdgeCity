@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">Analytics Dashboard</h1>
+
+<div class="row">
+    <!-- Summary Statistics -->
+    <div class="col-md-12 mb-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Reports</h5>
+                        <h2 class="card-text">{{ analytics.total_reports }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Unique Perpetrators</h5>
+                        <h2 class="card-text">{{ analytics.unique_perpetrators }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Repeat Offenders</h5>
+                        <h2 class="card-text">{{ analytics.repeat_offenders|length }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Max Overlap</h5>
+                        <h2 class="card-text">{{ analytics.overlap_statistics.keys()|map('int')|max|default(0) }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weekly Trend Chart -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Weekly Report Trend</h5>
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hourly Distribution Chart -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Report Time Distribution</h5>
+                <canvas id="timeDistributionChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Repeat Offenders Table -->
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Repeat Offenders</h5>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Perpetrator Name</th>
+                                <th>Report Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for name, count in analytics.repeat_offenders.items() %}
+                            <tr>
+                                <td>{{ name }}</td>
+                                <td>{{ count }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Weekly Trend Chart
+    const trendCtx = document.getElementById('trendChart').getContext('2d');
+    new Chart(trendCtx, {
+        type: 'line',
+        data: {
+            labels: {{ analytics.recent_trend|map(attribute='date')|list|tojson }},
+            datasets: [{
+                label: 'Daily Reports',
+                data: {{ analytics.recent_trend|map(attribute='count')|list|tojson }},
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+
+    // Hourly Distribution Chart
+    const timeCtx = document.getElementById('timeDistributionChart').getContext('2d');
+    const hourLabels = Array.from({length: 24}, (_, i) => `${i}:00`);
+    const hourData = hourLabels.map(hour => {
+        const h = parseInt(hour);
+        return {{ analytics.hourly_distribution|tojson }}[h] || 0;
+    });
+
+    new Chart(timeCtx, {
+        type: 'bar',
+        data: {
+            labels: hourLabels,
+            datasets: [{
+                label: 'Reports by Hour',
+                data: hourData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgb(75, 192, 192)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

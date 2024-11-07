@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">Admin Dashboard</h1>
+<div class="row mb-4">
+    <div class="col-md-12">
+        <a href="{{ url_for('admin_analytics') }}" class="btn btn-primary">View Analytics Dashboard</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h2>All Reports</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Perpetrator Name</th>
+                    <th>Overlap Count</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td>{{ report.id }}</td>
+                    <td>{{ report.perpetrator_name }}</td>
+                    <td>{{ report.overlap_count }}</td>
+                    <td>{{ report.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-info view-details" data-report-id="{{ report.id }}">View Details</button>
+                        <button class="btn btn-sm btn-danger delete-report" data-report-id="{{ report.id }}">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal for displaying report details -->
+<div class="modal fade" id="reportDetailsModal" tabindex="-1" aria-labelledby="reportDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reportDetailsModalLabel">Report Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="reportDetailsContent">
+                <!-- Report details will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const viewButtons = document.querySelectorAll('.view-details');
+    const deleteButtons = document.querySelectorAll('.delete-report');
+    const modal = new bootstrap.Modal(document.getElementById('reportDetailsModal'));
+
+    viewButtons.forEach(button => {
+        button.addEventListener('click', async function() {
+            const reportId = this.getAttribute('data-report-id');
+            try {
+                const response = await fetch(`/admin/report/${reportId}`);
+                const reportDetails = await response.json();
+                const modalContent = document.getElementById('reportDetailsContent');
+                modalContent.innerHTML = `
+                    <p><strong>Perpetrator Name:</strong> ${reportDetails.perpetrator_name}</p>
+                    <p><strong>Perpetrator Description:</strong> ${reportDetails.perpetrator_description}</p>
+                    <p><strong>Perpetrator Email:</strong> ${reportDetails.perpetrator_email || 'Not provided'}</p>
+                    <p><strong>Perpetrator Phone:</strong> ${reportDetails.perpetrator_phone || 'Not provided'}</p>
+                    <p><strong>Incident Details:</strong> ${reportDetails.incident_details}</p>
+                    <p><strong>Victim Email:</strong> ${reportDetails.victim_email}</p>
+                    <p><strong>Overlap Count:</strong> ${reportDetails.overlap_count}</p>
+                    <p><strong>Created At:</strong> ${reportDetails.created_at}</p>
+                `;
+                modal.show();
+            } catch (error) {
+                console.error('Error fetching report details:', error);
+            }
+        });
+    });
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', async function() {
+            if (confirm('Are you sure you want to delete this report?')) {
+                const reportId = this.getAttribute('data-report-id');
+                try {
+                    const response = await fetch(`/admin/report/${reportId}`, { method: 'DELETE' });
+                    if (response.ok) {
+                        this.closest('tr').remove();
+                    } else {
+                        alert('Failed to delete the report');
+                    }
+                } catch (error) {
+                    console.error('Error deleting report:', error);
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

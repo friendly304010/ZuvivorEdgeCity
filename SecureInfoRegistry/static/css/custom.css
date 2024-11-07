@@ -1,0 +1,147 @@
+/* Custom styles for mobile-friendly layout */
+body {
+    padding-top: 20px;
+}
+
+.container {
+    max-width: 960px;
+}
+
+/* Progress Sidebar Styles */
+.progress-sidebar {
+    position: sticky;
+    top: 20px;
+}
+
+.progress-sidebar .list-group-item {
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.progress-sidebar .list-group-item:hover {
+    transform: translateX(5px);
+}
+
+.progress-sidebar .list-group-item.active {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+/* Form Navigation Styles */
+.form-navigation {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.form-step {
+    transition: opacity 0.3s ease;
+}
+
+/* Identifier Groups Styles */
+.identifier-group {
+    padding: 1rem;
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: var(--bs-dark);
+    border: 1px solid var(--bs-gray-700);
+}
+
+.form-check-input {
+    cursor: pointer;
+}
+
+.form-check-label {
+    cursor: pointer;
+    user-select: none;
+}
+
+.identifier-group.show {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .form-control {
+        font-size: 16px; /* Prevents zooming on mobile devices */
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    /* Increase touch target size for better mobile usability */
+    .form-control,
+    .btn,
+    .list-group-item {
+        min-height: 44px;
+    }
+
+    /* Add some extra padding to form elements */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    /* Progress sidebar mobile adjustments */
+    .progress-sidebar {
+        position: relative;
+        margin-bottom: 2rem;
+    }
+
+    /* Improve spacing for mobile devices */
+    .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    /* Stack form navigation buttons on mobile */
+    .form-navigation {
+        flex-direction: column;
+    }
+}
+
+/* Form validation styles */
+.form-control.is-invalid {
+    border-color: var(--bs-danger);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-danger-rgb), 0.25);
+}
+
+.invalid-feedback {
+    color: var(--bs-danger);
+}
+
+/* Improve readability */
+.form-text {
+    color: var(--bs-gray-400);
+}
+
+/* Add transitions for smooth interactions */
+.form-control,
+.btn {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Checkbox custom styles */
+.form-check-input:checked {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+}

@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <!-- Progress Sidebar -->
+        <div class="progress-sidebar">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action active" data-step="1">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>1. Contact Info</span>
+                        <span class="badge bg-primary rounded-pill">1/6</span>
+                    </div>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action" data-step="2">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>2. Physical Description</span>
+                        <span class="badge bg-primary rounded-pill">2/6</span>
+                    </div>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action" data-step="3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>3. Vehicle Info</span>
+                        <span class="badge bg-primary rounded-pill">3/6</span>
+                    </div>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action" data-step="4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>4. Location & Occupation</span>
+                        <span class="badge bg-primary rounded-pill">4/6</span>
+                    </div>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action" data-step="5">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>5. Incident Details</span>
+                        <span class="badge bg-primary rounded-pill">5/6</span>
+                    </div>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action" data-step="6">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>6. Verify Identity</span>
+                        <span class="badge bg-primary rounded-pill">6/6</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <h2>Report a Perpetrator</h2>
+        <form id="reportForm">
+            <!-- Step 1: Contact Information -->
+            <div class="form-step" data-step="1">
+                <div class="mb-3">
+                    <label for="perpetratorName" class="form-label">Perpetrator Name (Optional)</label>
+                    <input type="text" class="form-control" id="perpetratorName">
+                    <div class="form-text">Leave blank if unknown or prefer not to specify.</div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input identifier-toggle" type="checkbox" id="emailCheck" data-target="emailGroup">
+                        <label class="form-check-label" for="emailCheck">Include Email</label>
+                    </div>
+                    <div id="emailGroup" class="identifier-group" style="display: none;">
+                        <label for="perpetratorEmail" class="form-label">Perpetrator Email</label>
+                        <input type="email" class="form-control" id="perpetratorEmail" placeholder="example@email.com">
+                        <div class="invalid-feedback">Please enter a valid email address.</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input identifier-toggle" type="checkbox" id="phoneCheck" data-target="phoneGroup">
+                        <label class="form-check-label" for="phoneCheck">Include Phone</label>
+                    </div>
+                    <div id="phoneGroup" class="identifier-group" style="display: none;">
+                        <label for="perpetratorPhone" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="perpetratorPhone" placeholder="+1-555-555-5555">
+                        <div class="invalid-feedback">Please enter a valid phone number.</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input identifier-toggle" type="checkbox" id="socialCheck" data-target="socialGroup">
+                        <label class="form-check-label" for="socialCheck">Include Social Media</label>
+                    </div>
+                    <div id="socialGroup" class="identifier-group" style="display: none;">
+                        <div class="mb-3">
+                            <label for="perpetratorXUsername" class="form-label">X (Twitter) Username</label>
+                            <input type="text" class="form-control" id="perpetratorXUsername" placeholder="@username">
+                        </div>
+                        <div class="mb-3">
+                            <label for="perpetratorTelegramUsername" class="form-label">Telegram Username</label>
+                            <input type="text" class="form-control" id="perpetratorTelegramUsername" placeholder="@username">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Physical Description -->
+            <div class="form-step" data-step="2" style="display: none;">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input identifier-toggle" type="checkbox" id="physicalCheck1" data-target="physicalGroup1">
+                                <label class="form-check-label" for="physicalCheck1">Include Physical Features</label>
+                            </div>
+                            <div id="physicalGroup1" class="identifier-group" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="hairColor" class="form-label">Hair Color</label>
+                                    <input type="text" class="form-control" id="hairColor">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="eyeColor" class="form-label">Eye Color</label>
+                                    <input type="text" class="form-control" id="eyeColor">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="skinColor" class="form-label">Skin Color</label>
+                                    <input type="text" class="form-control" id="skinColor">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input identifier-toggle" type="checkbox" id="physicalCheck2" data-target="physicalGroup2">
+                                <label class="form-check-label" for="physicalCheck2">Include Additional Details</label>
+                            </div>
+                            <div id="physicalGroup2" class="identifier-group" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="ethnicity" class="form-label">Ethnicity</label>
+                                    <input type="text" class="form-control" id="ethnicity">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="height" class="form-label">Height</label>
+                                    <input type="text" class="form-control" id="height" placeholder="e.g., 5'10">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="age" class="form-label">Age</label>
+                                    <input type="number" class="form-control" id="age" min="0" max="120">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Vehicle Information -->
+            <div class="form-step" data-step="3" style="display: none;">
+                <div class="mb-3">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input identifier-toggle" type="checkbox" id="vehicleCheck" data-target="vehicleGroup">
+                        <label class="form-check-label" for="vehicleCheck">Include Vehicle Information</label>
+                    </div>
+                    <div id="vehicleGroup" class="identifier-group" style="display: none;">
+                        <div class="mb-3">
+                            <label for="vehicleLicensePlate" class="form-label">License Plate</label>
+                            <input type="text" class="form-control" id="vehicleLicensePlate">
+                        </div>
+                        <div class="mb-3">
+                            <label for="vehicleModel" class="form-label">Vehicle Model</label>
+                            <input type="text" class="form-control" id="vehicleModel">
+                        </div>
+                        <div class="mb-3">
+                            <label for="vehicleMake" class="form-label">Vehicle Make</label>
+                            <input type="text" class="form-control" id="vehicleMake">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Location & Occupation -->
+            <div class="form-step" data-step="4" style="display: none;">
+                <div class="mb-3">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input identifier-toggle" type="checkbox" id="locationCheck" data-target="locationGroup">
+                        <label class="form-check-label" for="locationCheck">Include Location Information</label>
+                    </div>
+                    <div id="locationGroup" class="identifier-group" style="display: none;">
+                        <div class="mb-3">
+                            <label for="locations" class="form-label">Known Locations/Venues</label>
+                            <textarea class="form-control" id="locations" rows="2"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="city" class="form-label">City</label>
+                                    <input type="text" class="form-control" id="city">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="state" class="form-label">State</label>
+                                    <input type="text" class="form-control" id="state">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="country" class="form-label">Country</label>
+                                    <input type="text" class="form-control" id="country">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input identifier-toggle" type="checkbox" id="occupationCheck" data-target="occupationGroup">
+                        <label class="form-check-label" for="occupationCheck">Include Occupation Information</label>
+                    </div>
+                    <div id="occupationGroup" class="identifier-group" style="display: none;">
+                        <div class="mb-3">
+                            <label for="occupation" class="form-label">General Occupation</label>
+                            <input type="text" class="form-control" id="occupation">
+                        </div>
+                        <div class="mb-3">
+                            <label for="jobTitle" class="form-label">Job Title</label>
+                            <input type="text" class="form-control" id="jobTitle">
+                        </div>
+                        <div class="mb-3">
+                            <label for="organizations" class="form-label">Organizations</label>
+                            <textarea class="form-control" id="organizations" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: Incident Details -->
+            <div class="form-step" data-step="5" style="display: none;">
+                <div class="mb-3">
+                    <label for="incidentDetails" class="form-label">Incident Details</label>
+                    <textarea class="form-control" id="incidentDetails" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="additionalInfo" class="form-label">Additional Information</label>
+                    <textarea class="form-control" id="additionalInfo" rows="3"></textarea>
+                </div>
+            </div>
+
+            <!-- Step 6: Identity Verification -->
+            <div class="form-step" data-step="6" style="display: none;">
+                <div class="mb-3">
+                    <h4>Choose Verification Method</h4>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input identifier-toggle" type="radio" name="verificationMethod" id="emailVerification" data-target="emailVerificationGroup" checked>
+                        <label class="form-check-label" for="emailVerification">
+                            Email Notifications
+                        </label>
+                    </div>
+                    <div id="emailVerificationGroup" class="identifier-group">
+                        <div class="mb-3">
+                            <label for="victimEmail" class="form-label">Your Email for Notifications</label>
+                            <input type="email" class="form-control" id="victimEmail">
+                            <div class="form-text">We'll notify you if similar reports are submitted.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-check mb-3">
+                        <input class="form-check-input identifier-toggle" type="radio" name="verificationMethod" id="worldIdVerification" data-target="worldIdVerificationGroup">
+                        <label class="form-check-label" for="worldIdVerification">
+                            World ID Verification
+                        </label>
+                    </div>
+                    <div id="worldIdVerificationGroup" class="identifier-group" style="display: none;">
+                        <div class="mb-3">
+                            <p>Verify your identity using World ID</p>
+                            <button type="button" class="btn btn-primary" id="worldIdButton">
+                                Verify with World ID
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="form-navigation">
+                <button type="button" class="btn btn-secondary prev-step" style="display: none;">Previous</button>
+                <button type="button" class="btn btn-primary next-step">Next</button>
+                <button type="submit" class="btn btn-success submit-form" style="display: none;">Submit Report</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
