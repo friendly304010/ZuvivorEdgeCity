@@ -264,10 +264,17 @@
                     </div>
                     <div id="worldIdVerificationGroup" class="identifier-group" style="display: none;">
                         <div class="mb-3">
-                            <p>Verify your identity using World ID</p>
-                            <button type="button" class="btn btn-primary" id="worldIdButton">
+                            <p>Verify your identity using World ID to ensure report authenticity</p>
+                            <a href="{{ url_for('worldcoin_login') }}" class="btn btn-primary" id="worldIdButton">
+                                <svg width="24" height="24" class="me-2" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16 0C7.16344 0 0 7.16344 0 16C0 24.8366 7.16344 32 16 32C24.8366 32 32 24.8366 32 16C32 7.16344 24.8366 0 16 0ZM16 6C10.4772 6 6 10.4772 6 16C6 21.5228 10.4772 26 16 26C21.5228 26 26 21.5228 26 16C26 10.4772 21.5228 6 16 6Z" fill="currentColor"/>
+                                </svg>
                                 Verify with World ID
-                            </button>
+                            </a>
+                            <div class="form-text mt-2">
+                                World ID is a secure way to verify your humanity while maintaining privacy. 
+                                Your personal information remains private.
+                            </div>
                         </div>
                     </div>
                 </div>
