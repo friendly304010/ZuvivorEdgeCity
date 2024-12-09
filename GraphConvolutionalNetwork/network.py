@@ -162,8 +162,8 @@ node_features = torch.tensor(node_features, dtype=torch.float)
 
 # Construct adjacency matrix based on feature similarity
 num_reports = len(reports)
-adj_matrix = torch.zeros((num_reports, num_reports))
 
+edge_list = []
 for i in range(num_reports):
     for j in range(num_reports):
         if i != j:
@@ -172,20 +172,47 @@ for i in range(num_reports):
                 reports[i]["email"] == reports[j]["email"] or
                 reports[i]["phone_number"] == reports[j]["phone_number"] or
                 cosine_similarity([incident_embeddings[i]], [incident_embeddings[j]])[0, 0] > 0.8):
-                adj_matrix[i, j] = 1
+                edge_list.append([i, j])
 
-# Convert adjacency matrix to edge list for PyTorch Geometric
-edge_index = adj_matrix.nonzero(as_tuple=False).t()
+# Create edge_index directly from edge_list instead of using nonzero
+edge_index = torch.tensor(edge_list, dtype=torch.long).t()
 
 # Create PyTorch Geometric Data object
 data = Data(x=node_features, edge_index=edge_index)
 
-# Define the GNN model
+# Define a custom simple graph convolution layer
+class SimpleGraphConv(nn.Module):
+    def __init__(self, in_channels, out_channels):
+        super(SimpleGraphConv, self).__init__()
+        self.linear = nn.Linear(in_channels, out_channels)
+        
+    def forward(self, x, edge_index):
+        # Manual message passing
+        row, col = edge_index
+        
+        # Linear transformation
+        x = self.linear(x)
+        
+        # Aggregate messages (using mean aggregation)
+        out = torch.zeros_like(x)
+        for i in range(edge_index.shape[1]):
+            out[row[i]] += x[col[i]]
+        
+        # Normalize
+        degree = torch.zeros(x.shape[0], dtype=x.dtype, device=x.device)
+        for i in range(edge_index.shape[1]):
+            degree[row[i]] += 1
+        degree = torch.clamp(degree, min=1)
+        
+        out = out / degree.unsqueeze(1)
+        return out
+
+# Modify the GNN model to use our simple conv
 class GNNClassifier(nn.Module):
     def __init__(self, input_dim, hidden_dim, output_dim):
         super(GNNClassifier, self).__init__()
-        self.conv1 = GCNConv(input_dim, hidden_dim)
-        self.conv2 = GCNConv(hidden_dim, output_dim)
+        self.conv1 = SimpleGraphConv(input_dim, hidden_dim)
+        self.conv2 = SimpleGraphConv(hidden_dim, output_dim)
         self.fc = nn.Linear(output_dim, 1)
         self.sigmoid = nn.Sigmoid()
 
