@@ -5,5 +5,5 @@ node_modules
 .env
 .next
 __pycache__
-pk.keyGraphConvolutionalNetwork/pk.key
+pk.key
 GraphConvolutionalNetwork/pk.key
